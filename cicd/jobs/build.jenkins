@@ -1,0 +1,20 @@
+#!/usr/bin/env groovy
+
+pipelineJob('build-node-app') {
+    displayName('Build node-app')
+
+    definition {
+        cpsScm {
+            scm {
+                git {
+                    remote {
+                        url('https://github.com/SylwiaBrant/simple-node-js-react-npm-app.git')
+                        credentials('node-app')
+                    }
+                    branches('*/master')
+                }
+            }
+            scriptPath('cicd/pipelines/build.jenkins)
+        }
+    }
+}
