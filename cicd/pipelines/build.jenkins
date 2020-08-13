@@ -1,9 +1,9 @@
 #!/usr/bin/env groovy
 
-def label = "build-jenkins-operator-${UUID.randomUUID().toString()}"
+def label = "build-node-app-${UUID.randomUUID().toString()}"
 def home = "/home/jenkins"
-def workspace = "${home}/workspace/build-jenkins-operator"
-def workdir = "${workspace}/src/github.com/jenkinsci/kubernetes-operator/"
+def workspace = "${home}/workspace/build-node-app"
+def workdir = "${workspace}/src/github.com/SylwiaBrant/simple-node-js-react-npm-app/"
 
 podTemplate(label: label,
         containers: [
