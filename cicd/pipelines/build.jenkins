@@ -14,7 +14,6 @@ podTemplate(label: label,
                 envVar(key: 'GOPATH', value: '/home/jenkins/workspace/build-node-app'),
         ],
         ) {
-
     node(label) {
         dir(workdir) {
 
