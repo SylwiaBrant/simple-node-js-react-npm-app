@@ -1,0 +1,26 @@
+#!/usr/bin/env groovy
+
+def label = "build-node-app-${UUID.randomUUID().toString()}"
+def home = "/home/jenkins"
+def workspace = "${home}/workspace/build-jenkins-operator"
+def workdir = "${workspace}/src/github.com/SylwiaBrant/simple-node-js-react-npm-app"
+
+podTemplate(label: label,
+        containers: [
+                containerTemplate(name: 'jnlp', image: 'node:6-alpine'),
+                containerTemplate(name: 'go', image: 'golang:1-alpine', command: 'cat', ttyEnabled: true),
+        ],
+        envVars: [
+                envVar(key: 'GOPATH', value: workspace),
+        ],
+        ) {
+
+    node(label) {
+        dir(workdir) {
+        stage('Build') { 
+            steps {
+                sh 'npm install' 
+            }
+        }
+    }
+}
