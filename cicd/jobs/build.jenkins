@@ -14,7 +14,7 @@ pipelineJob('build-node-app') {
                     branches('*/master')
                 }
             }
-            scriptPath('cicd/pipelines/build.jenkins)
+            scriptPath('cicd/pipelines/build.jenkins')
         }
     }
 }
