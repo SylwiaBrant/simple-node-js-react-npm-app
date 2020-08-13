@@ -1,13 +1,13 @@
 #!/usr/bin/env groovy
 
-def label = "build-node-app-${UUID.randomUUID().toString()}"
+def label = "build-jenkins-operator-${UUID.randomUUID().toString()}"
 def home = "/home/jenkins"
 def workspace = "${home}/workspace/build-jenkins-operator"
-def workdir = "${workspace}/src/github.com/SylwiaBrant/simple-node-js-react-npm-app"
+def workdir = "${workspace}/src/github.com/jenkinsci/kubernetes-operator/"
 
 podTemplate(label: label,
         containers: [
-                containerTemplate(name: 'jnlp', image: 'node:6-alpine'),
+                containerTemplate(name: 'ndlp', image: 'node:6-alpine'),
                 containerTemplate(name: 'go', image: 'golang:1-alpine', command: 'cat', ttyEnabled: true),
         ],
         envVars: [
@@ -17,9 +17,19 @@ podTemplate(label: label,
 
     node(label) {
         dir(workdir) {
-        stage('Build') { 
-            steps {
-                sh 'npm install' 
+            stage('Init') {
+                timeout(time: 3, unit: 'MINUTES') {
+                    checkout scm
+                }
+                container('go') {
+                    sh 'apk --no-cache --update add make git gcc libc-dev'
+                }
+            }
+
+            stage('Build') {
+                container('go') {
+                    sh 'npm install'
+                }
             }
         }
     }
