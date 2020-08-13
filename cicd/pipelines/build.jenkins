@@ -11,20 +11,12 @@ podTemplate(label: label,
                 containerTemplate(name: 'go', image: 'golang:1-alpine', command: 'cat', ttyEnabled: true),
         ],
         envVars: [
-                envVar(key: 'GOPATH', value: workspace),
+                envVar(key: 'GOPATH', value: '/home/jenkins/workspace/build-node-app'),
         ],
         ) {
 
     node(label) {
         dir(workdir) {
-            stage('Init') {
-                timeout(time: 3, unit: 'MINUTES') {
-                    checkout scm
-                }
-                container('go') {
-                    sh 'apk --no-cache --update add make git gcc libc-dev'
-                }
-            }
 
             stage('Build') {
                 container('go') {
