@@ -7,8 +7,7 @@ def workdir = "${workspace}/src/github.com/SylwiaBrant/simple-node-js-react-npm-
 
 podTemplate(label: label,
         containers: [
-                containerTemplate(name: 'jnlp', image: 'jenkins/inbound-agent:alpine'),
-                containerTemplate(name: 'ndlp', image: 'node:current-alpine3.10'),
+                containerTemplate(name: 'ndlp', image: 'node:14-alpine'),
         ] ) {
     node(label) {
         dir(workdir) {
