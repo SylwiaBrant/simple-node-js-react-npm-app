@@ -14,6 +14,7 @@ podTemplate(label: label,
                 }
             stage('Build') {
                 container('ndlp') {
+                    sh 'pwd'
                     sh 'ls -la'
                     sh 'npm install'
                 }
