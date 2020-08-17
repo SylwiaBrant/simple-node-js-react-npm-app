@@ -1,24 +1,20 @@
 #!/usr/bin/env groovy
 
 def label = "build-node-app-${UUID.randomUUID().toString()}"
-def home = "/home/jenkins"
-def workspace = "${home}/workspace/build-node-app"
-def workdir = "${workspace}/src/github.com/SylwiaBrant/simple-node-js-react-npm-app/"
 
 podTemplate(label: label,
         containers: [
                 containerTemplate(name: 'jnlp', image: 'jenkins/inbound-agent:alpine'),
-                containerTemplate(name: 'ndlp', image: 'node:6-alpine', command: 'cat', ttyEnabled: true),
+                containerTemplate(name: 'ndlp', image: 'node:current-alpine', command: 'cat', ttyEnabled: true),
         ] ) {
     node(label) {
-        dir(workdir) {
             stage('Init') {
                 timeout(time: 3, unit: 'MINUTES') {
                     checkout scm
                 }
-            }
             stage('Build') {
                 container('ndlp') {
+                    sh 'ls -la'
                     sh 'npm install'
                 }
             }
