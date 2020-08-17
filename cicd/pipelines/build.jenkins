@@ -7,11 +7,16 @@ def workdir = "${workspace}/src/github.com/SylwiaBrant/simple-node-js-react-npm-
 
 podTemplate(label: label,
         containers: [
-                containerTemplate(name: 'jnlp1', image: 'jenkins/inbound-agent:alpine'),
-                containerTemplate(name: 'ndlp', image: 'node:6-alpine'),
+                containerTemplate(name: 'jnlp', image: 'jenkins/inbound-agent:alpine'),
+                containerTemplate(name: 'ndlp', image: 'node:6-alpine', command: ‘cat’, ttyEnabled: true),
         ] ) {
     node(label) {
         dir(workdir) {
+            stage('Init') {
+                timeout(time: 3, unit: ‘MINUTES’) {
+                    checkout scm
+                }
+            }
             stage('Build') {
                 container('ndlp') {
                     sh 'npm install'
