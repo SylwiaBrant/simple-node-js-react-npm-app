@@ -8,16 +8,38 @@ podTemplate(label: label,
                 containerTemplate(name: 'ndlp', image: 'node:current-alpine', command: 'cat', ttyEnabled: true),
         ] ) {
     node(label) {
-            stage('Init') {
-                timeout(time: 3, unit: 'MINUTES') {
-                    checkout scm
-                }
-            stage('Build') {
-                container('ndlp') {
-                    sh 'pwd'
-                    sh 'ls -la'
-                    sh 'npm install'
-                }
+        stage('Checkout source code from git') {
+            timeout(time: 3, unit: 'MINUTES') {
+                checkout scm
+            }
+        }
+        stage('Compile') {
+            container('ndlp') {
+                sh 'pwd'
+                sh 'ls -la'
+                sh 'npm install'
+                sh './jenkins/scripts/test.sh'
+            }
+        }
+  /*      stage('Build Docker Image') {
+            container('ndlp') {
+                sh 'pwd'
+                sh 'ls -la'
+                sh 'npm install'
+            }
+        }        
+        stage('Push Container') {
+            container('ndlp') {
+                echo 'Pushing container'
+            }
+        }*/
+        stage('Deploy') {
+            container('ndlp') {
+                echo 'Deployment phase'
+                sh './jenkins/scripts/deliver.sh'
+                input message: 'Finished using the web site? (Click "Proceed" to continue)'
+                sh './jenkins/scripts/kill.sh'
+              //  sh 'kubectl apply -f '
             }
         }
     }
